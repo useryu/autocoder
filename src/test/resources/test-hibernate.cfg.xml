@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC
+  "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+  "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+	<session-factory name="sessionFactory">
+		<!-- Hibernate配置属性 -->
+		<property name="hibernate.connection.driver_class">com.microsoft.sqlserver.jdbc.SQLServerDriver</property>
+		<property name="hibernate.connection.url">jdbc:sqlserver://localhost:1433;DatabaseName=newcoll</property>
+		<property name="hibernate.connection.username">sa</property>
+		<property name="hibernate.connection.password">root</property>
+		<property name="hibernate.default_schema">dbo</property>
+		<property name="hibernate.dialect">org.hibernate.dialect.SQLServer2005Dialect</property>
+
+		<!-- Hibernate-Tools使用属性 -->
+		<!-- 反转引擎方言 -->
+		<property name="hibernatetool.metadatadialect">org.hibernate.cfg.reveng.dialect.SQLServerMetaDataDialect</property>
+		<!-- 反转引擎配置 -->
+		<property name="hibernatetool.defaultPackageName">com.jingyu.entity</property>
+		<property name="hibernatetool.detectOptimisticLock">true</property>
+		<property name="hibernatetool.createCollectionForForeignKey">true</property>
+		<property name="hibernatetool.createManyToOneForForeignKey">true</property>
+		<property name="hibernatetool.detectManyToMany">true</property>
+		<property name="hibernatetool.detectOneToOne">true</property>
+		<!-- 反转引擎生成 -->
+		<property name="hibernatetool.outputDir">d:/temp/hibernate</property>
+	</session-factory>
+</hibernate-configuration>

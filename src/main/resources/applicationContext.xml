@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:task="http://www.springframework.org/schema/task"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+       http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.1.xsd
+       http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.1.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd
+       http://www.springframework.org/schema/task
+       http://www.springframework.org/schema/task/spring-task-3.0.xsd
+       ">
+
+    <!-- 扫描注解Bean -->
+    <context:component-scan base-package="cn.agilecode">
+    </context:component-scan>
+
+	<task:executor id="executor" pool-size="5" />  
+	<task:scheduler id="scheduler" pool-size="10" />  
+	<task:annotation-driven executor="executor" scheduler="scheduler" />
+    
+    <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <list>
+				<value>classpath:/config/${config_env}/app.properties</value>
+				<value>classpath:/config/common.properties</value>
+            </list>
+        </property>
+    </bean>
+ 
+    <!-- 国际化的消息资源文件 -->
+    <bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+        <property name="basenames">
+            <list>
+            	<value>classpath:/messages/messages</value>
+				<value>classpath:/messages/validation</value>
+            </list>
+        </property>
+        <property name="defaultEncoding" value="UTF-8"/>
+        <property name="cacheSeconds" value="60"/>
+    </bean>
+    
+	<import resource="/config/${config_env}/base.xml" />
+
+    <!-- 开启AOP监听 只对当前配置文件有效 
+	-->
+	<aop:aspectj-autoproxy proxy-target-class="true"/>
+	
+	<!-- 开启注解事务 只对当前配置文件有效 -->
+  	<tx:annotation-driven transaction-manager="txManager"/>
+
+    <bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+ 	<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+        <constructor-arg ref="dataSource"></constructor-arg>
+    </bean>
+     
+    <!-- -->
+    <tx:advice id="txAdvice" transaction-manager="txManager">
+        <tx:attributes>
+            <tx:method name="save*" propagation="REQUIRED" />
+            <tx:method name="add*" propagation="REQUIRED" />
+            <tx:method name="create*" propagation="REQUIRED" />
+            <tx:method name="insert*" propagation="REQUIRED" />
+            <tx:method name="update*" propagation="REQUIRED" />
+            <tx:method name="merge*" propagation="REQUIRED" />
+            <tx:method name="del*" propagation="REQUIRED" />
+            <tx:method name="remove*" propagation="REQUIRED" />
+            <tx:method name="put*" propagation="REQUIRED" />
+            <tx:method name="use*" propagation="REQUIRED"/>
+            <tx:method name="process*" propagation="REQUIRED"/>
+            <tx:method name="get*" propagation="REQUIRED" read-only="true" />
+             <tx:method name="query*" propagation="REQUIRED" read-only="true" />
+            <tx:method name="count*" propagation="REQUIRED" read-only="true" />
+            <tx:method name="find*" propagation="REQUIRED" read-only="true" />
+            <tx:method name="list*" propagation="REQUIRED" read-only="true" />
+        </tx:attributes>
+    </tx:advice>
+    
+    <aop:config expose-proxy="true">
+        <aop:pointcut id="txPointcut" expression="execution(* cn.agilecode..service..*.*(..))" />
+        <aop:advisor advice-ref="txAdvice" pointcut-ref="txPointcut"/>
+    </aop:config>
+    
+    
+	<bean id="freemarkerConfig"  
+	      class="cn.agilecode.common.web.support.ShiroFreeMarkerConfigurer">  
+	    <property name="templateLoaderPath" value="/WEB-INF/views/" />  
+	    <property name="freemarkerSettings">
+	        <props>  
+	            <prop key="template_update_delay">0</prop>  
+	            <prop key="default_encoding">UTF-8</prop>  
+	            <prop key="number_format">0.##</prop>  
+	            <prop key="datetime_format">yyyy-MM-dd</prop>  
+	            <prop key="classic_compatible">true</prop>  
+	            <prop key="template_exception_handler">ignore</prop>  
+	            <prop key="auto_import">common/spring.ftl as spring</prop>
+	        </props>  
+	    </property>  
+	</bean> 
+	
+	<!-- shiro 配置开始  -->
+    <!-- 数据库保存的密码是使用MD5算法加密的，所以这里需要配置一个密码匹配对象 -->  
+    <bean id="credentialsMatcher" class="org.apache.shiro.authc.credential.Md5CredentialsMatcher"></bean>  
+    <bean id="cacheManager" class="org.apache.shiro.cache.MemoryConstrainedCacheManager"></bean>  
+    <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">  
+        <property name="securityManager" ref="securityManager"></property>  
+        <property name="loginUrl" value="/login"></property>  
+        <property name="successUrl" value="/main" ></property>
+        <property name="unauthorizedUrl" value="/unauthorized"></property>
+          
+        <property name="filterChainDefinitions">  
+            <value>  
+            # some example chain definitions:
+            /admin/** = authc, roles[admin]
+            /assets/** = anon
+            /_docs/** = authc, perms[document:read]
+            /**/* = anon
+            /**/*.js=anon  
+            /**/*.img=anon  
+            /**/*.css=anon  
+            /**/*.png=anon  
+            /**/*.gif=anon  
+            /**/*.jpg=anon  
+            /**/*.ico=anon
+            # more URL-to-FilterChain definitions here
+            </value>  
+        </property>  
+    </bean>  
+    <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">  
+        <property name="realm" ref="jdbcRealm"></property>
+        <property name="cacheManager" ref="cacheManager"></property>  
+    </bean>  
+	<bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"></bean>
+	
+    <bean id="jdbcRealm" class="cn.agilecode.autocoder.web.support.MyShiroRealm">  
+        <property name="credentialsMatcher" ref="credentialsMatcher"></property>  
+        <property name="permissionsLookupEnabled" value="true"></property>  
+        <property name="dataSource" ref="dataSource"></property>  
+        <property name="authenticationQuery"  
+            value="SELECT id,password FROM user WHERE username = ?"></property>  
+        <property name="userRolesQuery"  
+            value="SELECT name from role ri left join user ui on ri.id=ui.role_id WHERE username = ?"></property>  
+        <property name="permissionsQuery"  
+            value="SELECT rgi.key FROM function rgi left join role_has_function rf on rgi.id=rf.function_Id left join role roi on rf.role_Id=roi.id WHERE roi.name = ? and rgi.key is not null"></property>  
+    </bean>  
+    
+    
+	<!-- shiro 配置结束  --> 
+</beans>
