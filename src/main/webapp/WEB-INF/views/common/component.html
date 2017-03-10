@@ -1,0 +1,49 @@
+<script type="text/javascript">
+<!--
+var base = '${base}';
+//-->
+</script>
+<script src="${base}/assets/js/jquery.min.js"></script>
+<script type="text/x-template" id="menu">
+		<aside style="width: 230px;">
+			<el-menu style="border-top: 1px solid #475669;"
+				default-active="${activeMenuIndex}" class="el-menu-vertical-demo"
+				@select="handleselect"
+				theme="dark" unique-opened router>
+			<el-menu-item index="${base}/main"><i class="fa fa-line-chart"></i>主页</el-menu-item>
+			<el-submenu index="1">
+				<template slot="title"> <i class="el-icon-message"></i>用户管理</template>
+				<el-menu-item index="${base}/user/list">用户管理</el-menu-item>
+				<el-menu-item index="2">Form</el-menu-item>
+				<el-menu-item index="3">页面3</el-menu-item>
+			</el-submenu>
+			<el-submenu index="2">
+				<template slot="title"><i class="fa fa-id-card-o"></i>导航二</template>
+				<el-menu-item index="/page4">选项4</el-menu-item>
+				<el-menu-item index="/page5">选项5</el-menu-item>
+			</el-submenu>
+			</el-menu>
+		</aside>
+</script>
+
+
+<script type="text/x-template" id="header">
+
+		<el-col :span="24" class="panel-top">
+			<el-col :span="20" style="font-size:26px;"> <img
+				src="${base}/assets/img/logo.jpg" class="logo"> <span>藏品系统</span> 
+			</el-col> 
+			<el-col :span="4" class="rightbar">
+				<el-dropdown trigger="click">
+					<span class="el-dropdown-link" style="color:white;cursor: pointer;"><img src="${base}/assets/img/logo.jpg" class="head">张三</span>
+					<el-dropdown-menu slot="dropdown">
+						<el-dropdown-item>我的消息</el-dropdown-item>
+						<el-dropdown-item>设置</el-dropdown-item>
+						<el-dropdown-item divided @click.native="logout">退出登录</el-dropdown-item>
+					</el-dropdown-menu>
+				</el-dropdown>
+			</el-col>
+		</el-col>
+
+</script>
+

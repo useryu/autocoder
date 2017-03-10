@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>测试页</title>
+<style type="text/css">
+html, body {
+  font: 13px/18px sans-serif;
+}
+select {
+  min-width: 300px;
+}
+</style>
+</head>
+<body>
+<script src="${base}/assets/js/vue.min.js"></script>
+
+
+<div id="el">
+  <input v-model="parentMsg"> {{parentMsg}}
+  <br>
+  <child v-bind:my-message="parentMsg"></child>
+  static:
+  <child :my-message="parentMsg"></child>
+</div>
+
+
+<script type="text/javascript">
+Vue.component('child', {
+	  // camelCase in JavaScript
+	  props: ['myMessage'],
+	  template: '<span>{{ myMessage }}</span>'
+	})
+
+	var vm = new Vue({
+	  el: '#el',
+	  data: {
+	    parentMsg:''
+	  }
+	})
+</script>
+</body>
+</html>

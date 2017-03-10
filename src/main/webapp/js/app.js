@@ -414,7 +414,7 @@
 
         // Load the data.
         toolkit.load({
-            url: "data/test_schema.json"
+            url: "/autocoder/project/getDemoProject.json"
         });
 
 // ------------------------ /loading  ------------------------------------
@@ -424,3 +424,15 @@
     });
 })();
 
+
+function save(){
+	$.ajax({
+		  type: 'POST',
+		  url: "/autocoder/project/save",
+		  data: {"jsonStr":$("#dataset").val()},
+		  success: function(resp){
+			  
+		  },
+		  dataType: "json"
+		});
+}

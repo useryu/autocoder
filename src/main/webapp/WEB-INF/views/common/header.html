@@ -1,0 +1,18 @@
+
+	<div id="app">
+		<el-row class="panel"> 
+		<el-col :span="24" class="panel-top">
+			<el-col :span="20" style="font-size:26px;"> <img
+				src="${base}/assets/img/logo.jpg" class="logo"> <span>藏品系统</span> 
+			</el-col> 
+			<el-col :span="4" class="rightbar">
+				<el-dropdown trigger="click">
+					<span class="el-dropdown-link" style="color:white;cursor: pointer;"><img src="${base}/assets/img/logo.jpg" class="head">张三</span>
+					<el-dropdown-menu slot="dropdown">
+						<el-dropdown-item>我的消息</el-dropdown-item>
+						<el-dropdown-item>设置</el-dropdown-item>
+						<el-dropdown-item divided @click.native="logout">退出登录</el-dropdown-item>
+					</el-dropdown-menu>
+				</el-dropdown>
+			</el-col>
+		</el-col>

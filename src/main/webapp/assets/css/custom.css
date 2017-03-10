@@ -1,0 +1,115 @@
+body {
+	margin: 0;
+	padding: 0;
+	background: #314461;
+	font-family: Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB,
+		Microsoft YaHei, SimSun, sans-serif;
+	font-size: 14px;
+	-webkit-font-smoothing: antialiased;
+}
+
+#app {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	width: 100%;
+}
+
+.fade-enter-active, .fade-leave-active {
+	transition: opacity .5s
+}
+
+.fade-enter, .fade-leave-active {
+	opacity: 0
+}
+
+.panel {
+	position: absolute;
+	top: 0px;
+	bottom: 0px;
+	width: 100%;
+}
+
+.panel-top {
+	height: 60px;
+	line-height: 60px;
+	background: #314461;
+	color: white;
+}
+.panel-top .rightbar {
+	text-align: right;
+	padding-right: 35px;
+}
+
+.panel-top .rightbar .head {
+	width: 40px;
+	height: 40px;
+	border-radius: 20px;
+	margin: 10px 0px 10px 10px;
+	float: right;
+}
+
+.panel-center {
+	background: #324057;
+	position: absolute;
+	top: 60px;
+	bottom: 0px;
+	overflow: hidden;
+}
+
+.panel-c-c {
+	background: #d3e1e3;
+	position: absolute;
+	right: 0px;
+	top: 0px;
+	bottom: 0px;
+	left: 230px;
+	overflow-y: scroll;
+	padding: 20px;
+}
+
+.logout {
+	background: url(../assets/logout_36.png);
+	background-size: contain;
+	width: 20px;
+	height: 20px;
+	float: left;
+}
+
+.logo {
+	width: 60px;
+	margin: 10px 10px 0px 10px;
+}
+
+.tip-logout {
+	float: right;
+	margin-right: 20px;
+	padding-top: 5px;
+	cursor: pointer;
+}
+
+.admin {
+	color: #c0ccda;
+	text-align: center;
+}
+.el-table .odd-row {
+  background: #c9e5f5;
+}
+.grid-content{
+	background-color:white;
+}
+.capation{
+	float: left;
+	display: inline-block;
+	font-size: 18px;
+	line-height: 30px;
+	font-weight: 400;
+	margin: 0;
+	padding: 6px 10px 6px 10px;
+	margin-bottom: 8px;
+	background-color:#314461;
+	color: white;
+}
+.el-menu-vertical{
+	border-top: 1px solid #475669;
+}

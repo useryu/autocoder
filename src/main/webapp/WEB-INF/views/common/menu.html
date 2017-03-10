@@ -1,0 +1,19 @@
+		<aside style="width: 230px;">
+			<el-menu style="border-top: 1px solid #475669;"
+				default-active="${activeMenuIndex}" class="el-menu-vertical-demo"
+				@select="handleselect"
+				theme="dark" unique-opened=true router=false>
+			<el-menu-item index="${base}/main"><i class="fa fa-line-chart"></i>主页</el-menu-item>
+			<el-submenu index="1">
+				<template slot="title"> <i class="el-icon-message"></i>用户管理</template>
+				<el-menu-item index="${base}/user/list">用户管理</el-menu-item>
+				<el-menu-item index="2">Form</el-menu-item>
+				<el-menu-item index="3">页面3</el-menu-item>
+			</el-submenu>
+			<el-submenu index="2">
+				<template slot="title"><i class="fa fa-id-card-o"></i>导航二</template>
+				<el-menu-item index="/page4">选项4</el-menu-item>
+				<el-menu-item index="/page5">选项5</el-menu-item>
+			</el-submenu>
+			</el-menu>
+		</aside>

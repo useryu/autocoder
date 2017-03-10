@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<!-- 引入样式 -->
+<link rel="stylesheet"
+	href="${base}/assets/element/theme-default/index.css">
+<link rel="stylesheet"
+	href="${base}/assets/css/custom.css">
+<!-- 先引入 Vue -->
+<script src="${base}/assets/js/vue.js"></script>
+<#include "/common/component.html">
+</head>
+<body>
+	<div id="app">
+		<el-row class="panel"> 
+		<common-header></common-header>
+		
+		<el-col :span="24" class="panel-center"> <!--<el-col :span="4">-->
+		<common-menu></common-menu>
+		
+		<!--below is main content -->
+		<section class="panel-c-c">
+			<el-col :span="24" class="grid-content bg-purple-light">
+				<el-col :span="24" class="capation" ><i class="el-icon-document"></i>主页</el-col>
+			    
+			    <el-col :span="24" class="toolbar">
+					欢迎使用系统
+				</el-col>
+				
+			</el-col>
+		</section>
+		<!--</el-col>--> 
+		</el-col>
+		</el-row>
+
+	</div>
+<!-- 引入组件库 -->
+<script src="${base}/assets/element/index.js"></script>
+<script src="${base}/assets/js/custom.js"></script>
+<script>
+	new Vue({
+		el : '#app',
+		data : function() {
+			return {
+			}
+		},
+		created:function(){
+        }
+	})
+</script>
+</html>

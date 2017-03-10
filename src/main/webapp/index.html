@@ -11,8 +11,8 @@
 		
 		</script>
 		<title>Database creater</title>
-		<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
-		<link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+		<link href="./css/bootstrap.min.css" rel="stylesheet">
+		<link href="./css/font-awesome.css" rel="stylesheet">
 		<link rel="stylesheet" href="./css/main.css">
 		<link rel="stylesheet" href="./css/jsplumbtoolkit-defaults.css">
 		<link rel="stylesheet" href="./css/jsplumbtoolkit-demo.css">
@@ -24,15 +24,13 @@
 
 		<div class="breadcrumbs">
 			<div class="crumbs">
-				<a href="/demos.html">DEMOS</a>
-				&nbsp; &rarr; &nbsp;
-				<a href="/demos.html#Toolkit">Toolkit </a>
-				&nbsp; &rarr; &nbsp; Database Visualizer
+				表设计器
+				<input type="button" onclick="save()" value="保存设计"/>
 			</div>
 
 		</div>
 
-		<div class="jtk-page-container">
+		<div class="jtk-page-container" id="app">
 			<div class="jtk-container">
 
 				<!-- content -->
@@ -73,7 +71,7 @@
 					</div>
 
 					<!-- the current dataset -->
-					<div class="jtk-demo-dataset"></div>
+					<div class="jtk-demo-dataset" id="dataset"></div>
 
 				</div>
 
@@ -92,7 +90,7 @@
 				<div class="jtk-copyright">
 					<div><img src="img/logo-jsplumb-green.png"></div>
 					<div>
-						© 2017 jsPlumb, Inc. All rights reserved. &nbsp;&nbsp; ABN : 31 646 922 756&nbsp;&nbsp;
+						© 2017 agilecode, Inc. All rights reserved.&nbsp;&nbsp;
 					</div>
 				</div>
 				<div class="jtk-links">
