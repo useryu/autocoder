@@ -20,31 +20,24 @@ import cn.agilecode.autocoder.metadata.TypeMapping;
 public class Generator {
 	
 	protected MetaBuilder metaBuilder;
-	protected ModelGenerator modelGenerator;
-	protected DaoGenerator daoGenerator;
-	protected ServiceGenerator serviceGenerator;
 	protected DataDictionaryGenerator dataDictionaryGenerator;
-	protected ControllerGenerator controllerGenerator;
 	protected ModelListHtmlGenerator modelListHtmlGenerator;
 	protected boolean generateDataDictionary = false;
 	protected ModelEditHtmlGenerator modelEditHtmlGenerator;
+	protected BaseGenerator baseGenerator;
 	
 	
-	public Generator(MetaBuilder metaBuilder, ModelGenerator modelGenerator, DaoGenerator daoGenerator,
-			ServiceGenerator serviceGenerator,DataDictionaryGenerator dataDictionaryGenerator,
-			ControllerGenerator controllerGenerator,ModelListHtmlGenerator modelListHtmlGenerator,
+	public Generator(MetaBuilder metaBuilder, DataDictionaryGenerator dataDictionaryGenerator,
+			ModelListHtmlGenerator modelListHtmlGenerator,
 			ModelEditHtmlGenerator modelEditHtmlGenerator,
-			boolean generateDataDictionary) {
+			boolean generateDataDictionary, BaseGenerator baseGenerator) {
 		super();
 		this.metaBuilder = metaBuilder;
-		this.modelGenerator = modelGenerator;
-		this.daoGenerator = daoGenerator;
-		this.serviceGenerator = serviceGenerator;
 		this.dataDictionaryGenerator = dataDictionaryGenerator;
 		this.generateDataDictionary = generateDataDictionary;
-		this.controllerGenerator = controllerGenerator;
 		this.modelListHtmlGenerator = modelListHtmlGenerator;
 		this.modelEditHtmlGenerator = modelEditHtmlGenerator;
+		this.baseGenerator = baseGenerator;
 	}
 
 	/**
@@ -123,58 +116,32 @@ public class Generator {
 			System.out.println("TableMeta 数量为 0，不生成任何文件");
 			return ;
 		}
-		
-		if (modelGenerator != null) {
-			try {
-				modelGenerator.generate(tableMetas);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-		
-		if (daoGenerator != null) {
-			try {
-				daoGenerator.generate(tableMetas);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-		
-		if (serviceGenerator != null) {
-			try {
-				serviceGenerator.generate(tableMetas);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
 
-		if (controllerGenerator != null) {
-			try {
-				controllerGenerator.generate(tableMetas);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+		try {
+			this.baseGenerator.generate(tableMetas);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		
-		if (modelListHtmlGenerator != null) {
-			try {
-				modelListHtmlGenerator.generate(tableMetas);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-		
-		if (modelEditHtmlGenerator != null) {
-			try {
-				modelEditHtmlGenerator.generate(tableMetas);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-		
-		if (dataDictionaryGenerator != null && generateDataDictionary) {
-			dataDictionaryGenerator.generate(tableMetas);
-		}
+//		if (modelListHtmlGenerator != null) {
+//			try {
+//				modelListHtmlGenerator.generate(tableMetas);
+//			} catch (Exception e) {
+//				e.printStackTrace();
+//			}
+//		}
+//		
+//		if (modelEditHtmlGenerator != null) {
+//			try {
+//				modelEditHtmlGenerator.generate(tableMetas);
+//			} catch (Exception e) {
+//				e.printStackTrace();
+//			}
+//		}
+//		
+//		if (dataDictionaryGenerator != null && generateDataDictionary) {
+//			dataDictionaryGenerator.generate(tableMetas);
+//		}
 		
 		long usedTime = (System.currentTimeMillis() - start) / 1000;
 		System.out.println("Generate complete in " + usedTime + " seconds.");

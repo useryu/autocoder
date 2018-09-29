@@ -106,9 +106,9 @@ public class ServiceGenerator {
 		vars.put("baseServicePackageName", this.baseServicePackageName);
 		vars.put("daoPackageName", this.daoPackageName);
 		vars.put("modelPackageName", this.modelPackageName);
+		vars.put("coreBasePackage", this.coreBasePackage);
 		vars.put("modelName", tableMeta.getModelName());
 		vars.put("daoFieldName", genDaoFieldName(tableMeta.getModelName()));
-		vars.put("coreBasePackage", this.coreBasePackage);
 		StringWriter out = new StringWriter();
 		template.process(vars, out);
 		out.flush();

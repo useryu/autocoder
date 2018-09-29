@@ -10,6 +10,9 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 import javax.sql.DataSource;
@@ -29,6 +32,7 @@ import org.apache.commons.dbcp.BasicDataSourceFactory;
 import cn.agilecode.autocoder.dialect.Dialect;
 import cn.agilecode.autocoder.dialect.MssqlDialect;
 import cn.agilecode.autocoder.dialect.MysqlDialect;
+import cn.agilecode.autocoder.generator.BaseGenerator;
 import cn.agilecode.autocoder.generator.ControllerGenerator;
 import cn.agilecode.autocoder.generator.DaoGenerator;
 import cn.agilecode.autocoder.generator.DataDictionaryGenerator;
@@ -36,8 +40,11 @@ import cn.agilecode.autocoder.generator.Generator;
 import cn.agilecode.autocoder.generator.ModelEditHtmlGenerator;
 import cn.agilecode.autocoder.generator.ModelGenerator;
 import cn.agilecode.autocoder.generator.ModelListHtmlGenerator;
+import cn.agilecode.autocoder.generator.RepoGenerator;
 import cn.agilecode.autocoder.generator.ServiceGenerator;
+import cn.agilecode.autocoder.generator.bean.TemplateBean;
 import cn.agilecode.autocoder.metadata.MetaBuilder;
+import cn.agilecode.autocoder.util.FileUtils;
 
 
 
@@ -174,7 +181,6 @@ public class GeneratorFrame extends JFrame {
 
 	protected void generateCode() {
 		GeneratorBean generatorBean = generatorPanel.getGeneratorBean();
-		String projectBasePackage = generatorBean.getCoreBasePackage()+"."+generatorBean.getProjectSpecifyName();//这个和每个工程相关
 		Properties properties = new Properties();
 		try {
 			properties.put("driverClassName", generatorBean.getDriverClassName());
@@ -186,11 +192,35 @@ public class GeneratorFrame extends JFrame {
 			DataSource ds = BasicDataSourceFactory.createDataSource(properties);
 			DataDictionaryGenerator dictGenerator = new DataDictionaryGenerator(ds,
 					generatorBean.getOutputDir());
-			String modelPackageName = generatorBean.getCoreBasePackage() + "." + "model";
-			String commonModelPackageName = generatorBean.getCoreBasePackage() + "." + "common.model";
-			ModelGenerator modelGenerator = new ModelGenerator(
-					commonModelPackageName, modelPackageName, generatorBean.getOutputDir(),
-					"model.ftl", generatorBean.isDelOldFile());
+			String coreBasePackage = generatorBean.getCoreBasePackage();
+			String projectPackage = coreBasePackage;
+			String modelPackageName = coreBasePackage + "." + "model";
+			String daoPackageName = coreBasePackage + "." + "dao";
+			String servicePackageName = coreBasePackage + "." + "service";
+			String controllerPackageName = coreBasePackage + "." + "controller";
+			
+			String modelOutDir = generatorBean.getOutputDir() + FileUtils.genPackagePath(modelPackageName);
+			String daoOutDir = generatorBean.getOutputDir() + FileUtils.genPackagePath(daoPackageName);
+			String serviceOutDir = generatorBean.getOutputDir() + FileUtils.genPackagePath(servicePackageName);
+			String controllerOutDir = generatorBean.getOutputDir() + FileUtils.genPackagePath(controllerPackageName);
+			TemplateBean[] templates = new TemplateBean[] {
+					new TemplateBean("model","model.ftl",modelOutDir,"","java"),
+					new TemplateBean("dao","repo.ftl",daoOutDir,"Repository","java"),	
+					new TemplateBean("serviceInf","serviceInf.ftl",serviceOutDir,"Service","java","I"),	
+					new TemplateBean("serviceImpl","serviceImpl.ftl",serviceOutDir,"Service","java"),	
+					new TemplateBean("controller","controller.ftl",controllerOutDir,"Controller","java"),	
+			};
+
+			Map<String, Object> vars = new HashMap<String, Object>();
+			vars.put("coreBasePackage", coreBasePackage);
+			vars.put("daoPackageName", daoPackageName);
+			//vars.put("baseDaoPackageName", baseDaoPackageName);
+			vars.put("modelPackageName", modelPackageName);
+			vars.put("controllerPackage", controllerPackageName);
+			vars.put("projectPackage", projectPackage);
+			vars.put("servicePackageName", servicePackageName);
+			vars.put("baseServicePackageName", servicePackageName);
+			
 			MetaBuilder metaBuilder = new MetaBuilder(ds);
 			Dialect dialect = null;
 			if(generatorBean.getDriverClassName().equals("com.microsoft.sqlserver.jdbc.SQLServerDriver")) {
@@ -202,29 +232,14 @@ public class GeneratorFrame extends JFrame {
 			metaBuilder.addExcludedTable(excludedTables);
 			metaBuilder.setRemovedTableNamePrefixes(generatorBean.getRemovedTableNamePrefixes());
 			metaBuilder.setIncludeTableNamePrefixes(generatorBean.getIncludeTableNamePrefixe());
-			
-			String daoPackageName = generatorBean.getCoreBasePackage() + "." + "dao";
-			String baseDaoPackageName = generatorBean.getCoreBasePackage() + "." + "common.dao";
-			DaoGenerator daoGenerator = new DaoGenerator(generatorBean.getCoreBasePackage(), daoPackageName,
-					modelPackageName, baseDaoPackageName, generatorBean.getOutputDir(), "daoInf.ftl",
-					"daoImpl.ftl", generatorBean.isDelOldFile());
-			String servicePackageName = projectBasePackage + "." + "service";
-			String baseServicePackageName = generatorBean.getCoreBasePackage() + "." + "common.service";
-			ServiceGenerator serviceGenerator = new ServiceGenerator(
-					servicePackageName, modelPackageName, baseServicePackageName,
-					daoPackageName, generatorBean.getCoreBasePackage(), generatorBean.getOutputDir(), "serviceInf.ftl", "serviceImpl.ftl",
-					generatorBean.isDelOldFile());
-			String controllerPackageName = projectBasePackage + "." + "web.controller";
-			ControllerGenerator controllerGenerator = new ControllerGenerator(
-					controllerPackageName, projectBasePackage, generatorBean.getCoreBasePackage(), generatorBean.getOutputDir(),
-					"controller.ftl", generatorBean.isDelOldFile());
+	
 			ModelListHtmlGenerator listGenerator = new ModelListHtmlGenerator(
 					generatorBean.getHtmlOutputDir(), "client_pagging_mode_list.ftl", "server_pagging_mode_list.ftl", generatorBean.isDelOldFile());
 			ModelEditHtmlGenerator editGenerator = new ModelEditHtmlGenerator(
 					generatorBean.getHtmlOutputDir(), "model_edit.ftl", generatorBean.isDelOldFile());
-			Generator g = new Generator(metaBuilder, modelGenerator, daoGenerator,
-					serviceGenerator, dictGenerator, controllerGenerator,
-					listGenerator, editGenerator, generatorBean.isDelOldFile());
+			
+			Generator g = new Generator(metaBuilder, dictGenerator, listGenerator, editGenerator,
+					generatorBean.isDelOldFile(), new BaseGenerator(templates, vars, generatorBean.isDelOldFile()));
 			g.generate();
 			Date date = new Date();
 			SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd HH:mm");

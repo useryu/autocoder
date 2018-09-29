@@ -536,14 +536,13 @@ public class MetaBuilder {
 		StringBuffer def = new StringBuffer();
 		String lineBreaker = System.lineSeparator() + "\t";
 		if (cm.getName().equals("id")) {
-			def.append("@Id").append(lineBreaker).append("@GeneratedValue(strategy = GenerationType.AUTO)")
-					.append(lineBreaker).append("@Column(name = \"id\", nullable = false)").append(lineBreaker)
-					.append("@DocumentId");
+			def.append("@Id").append(lineBreaker).append("@GeneratedValue(strategy = GenerationType.IDENTITY)")
+					.append(lineBreaker).append("@Column(name = \"id\", nullable = false)").append(lineBreaker);
 		} else if (cm.getJavaType().equals("java.util.Date")) {
 			def.append("@Temporal(TemporalType.DATE)").append(lineBreaker)
 					.append("@Column(name = \"" + cm.getName() + "\")");
 		} else {
-			def.append("@Field").append(lineBreaker).append("@Column(name = \"" + cm.getName() + "\")");
+			def.append(lineBreaker).append("@Column(name = \"" + cm.getName() + "\")");
 		}
 		cm.setHibernateDef(def.toString());
 	}

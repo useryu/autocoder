@@ -12,11 +12,11 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
 import cn.agilecode.common.util.StrKit;
-import ${baseDaoPackageName}.BaseHibernateDao;
-import ${coreBasePackage}.common.model.FullTextSearch;
-import ${coreBasePackage}.common.pagination.PageContext;
-import ${coreBasePackage}.common.web.support.AdvSearchCondition;
-import ${coreBasePackage}.common.web.support.AutoPropertyEditorRegistrySupport;
+import cn.agilecode.common.dao.BaseHibernateDao;
+import cn.agilecode.common.model.FullTextSearch;
+import cn.agilecode.common.pagination.PageContext;
+import cn.agilecode.common.web.support.AdvSearchCondition;
+import cn.agilecode.common.web.support.AutoPropertyEditorRegistrySupport;
 import ${daoPackageName}.I${modelName}Dao;
 import ${modelPackageName}.${modelName};
 

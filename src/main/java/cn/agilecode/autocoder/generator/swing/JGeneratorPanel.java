@@ -26,7 +26,7 @@ public class JGeneratorPanel extends JPanel {
 	 */
 	private static final long serialVersionUID = 1L;
 	private final String[] drivers = { "com.microsoft.sqlserver.jdbc.SQLServerDriver", "com.mysql.jdbc.Driver"};
-	private final String[] urlTemplate = { "jdbc:sqlserver://192.168.1.252:1433;DatabaseName=jinyuInfo", "jdbc:mysql://127.0.0.1/pmp?createDatabaseIfNotExist=true&amp;useUnicode=true&amp;characterEncoding=utf-8"};
+	private final String[] urlTemplate = { "jdbc:sqlserver://192.168.1.252:1433;DatabaseName=jinyuInfo", "jdbc:mysql://127.0.0.1/pm?createDatabaseIfNotExist=true&amp;useUnicode=true&amp;characterEncoding=utf-8"};
 
 	private BindingGroup m_bindingGroup;
 	private GeneratorBean generatorBean = new GeneratorBean();
@@ -51,18 +51,18 @@ public class JGeneratorPanel extends JPanel {
 	}
 	
 	private void initDefaultSettings() {
-		generatorBean.setDriverClassName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-		generatorBean.setUrl("jdbc:sqlserver://192.168.1.252:1433;DatabaseName=jinyuInfo");
-		generatorBean.setUsername("sa");
+		generatorBean.setDriverClassName("com.mysql.jdbc.Driver");
+		generatorBean.setUrl("jdbc:mysql://127.0.0.1/pm?createDatabaseIfNotExist=true&amp;useUnicode=true&amp;characterEncoding=utf-8");
+		generatorBean.setUsername("root");
 		generatorBean.setPassword("123456");
 		generatorBean.setExcludedTables("");
-		generatorBean.setBaseDir("D:/temp");
+		generatorBean.setBaseDir("c:/tmp");
 		String baseDir = generatorBean.getBaseDir();
 		generatorBean.setOutputDir(baseDir  + "/java/");
 		generatorBean.setHtmlOutputDir(baseDir + "/html/");
-		generatorBean.setCoreBasePackage("com.jinyu");
-		generatorBean.setProjectSpecifyName("workshop");
-		generatorBean.setIncludeTableNamePrefixe("gf_");
+		generatorBean.setCoreBasePackage("com.fisher.pm");
+		generatorBean.setProjectSpecifyName("pm");
+		generatorBean.setIncludeTableNamePrefixe("");
 		generatorBean.setRemovedTableNamePrefixes("");
 		generatorBean.setDelOldFile(true);
 	}

@@ -2,6 +2,7 @@ package ${controllerPackage};
 
 
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -78,7 +79,7 @@ public class ${modelClassName}Controller extends BaseController{
 		datatableRespBean.setDraw(datatableReqBean.getDraw());
 		datatableRespBean.setRecordsTotal(pageInfo.getTotalSize());
 		datatableRespBean.setRecordsFiltered(pageInfo.getTotalSize());
-		List<String[]> data = null;
+		List<Map<String, Object>> data = null;
 		try {
 			data = genTableDataFromModel(pageInfo, req, "${modelFieldName}");
 		} catch (Exception e) {

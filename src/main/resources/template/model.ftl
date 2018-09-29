@@ -1,4 +1,4 @@
-package ${packageName};
+package ${modelPackageName};
 
 import java.util.Date;
 import java.util.HashSet;
@@ -18,14 +18,9 @@ import javax.persistence.JoinTable;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.Pattern;
 
-import org.hibernate.search.annotations.DocumentId;
-import org.hibernate.search.annotations.Field;
-import org.hibernate.search.annotations.Indexed;
-import org.hibernate.validator.constraints.Email;
-import org.hibernate.validator.constraints.NotEmpty;
-import org.hibernate.search.annotations.IndexedEmbedded;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -36,9 +31,10 @@ import cn.agilecode.common.model.Idenfitier;
 import cn.agilecode.common.model.ShowInList;
 
 @Entity
+@DynamicInsert
+@DynamicUpdate
 @Table(${table.tableHibernateDef})
-@Indexed
-@JsonIdentityInfo(generator=ObjectIdGenerators.IntSequenceGenerator.class, property="@id")
+@JsonIdentityInfo(generator=ObjectIdGenerators.IntSequenceGenerator.class, property="id")
 public class ${table.modelName} extends AbstractModel implements Idenfitier<Long>{
 	
 	private static final long serialVersionUID = 1L;
